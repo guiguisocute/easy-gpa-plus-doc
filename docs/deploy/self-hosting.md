@@ -7,7 +7,14 @@
 | `compose.dev.yaml` | 源码热更新的开发环境，见[快速开始](/guide/getting-started) |
 | `compose.yaml --profile full` | 构建静态前端、API 与全部 Worker 的独立部署 |
 
-本页说明后者。只想发布已构建的镜像而不在服务器编译，见[按组件发布与升级](/deploy/releases)。
+本页说明后者。独立部署有两种启动方式，得到的服务、端口和数据卷完全相同：
+
+| 方式 | 适合 |
+| --- | --- |
+| [方式一：从源码构建](#from-source) | 需要改代码，或想在服务器上自己编译 |
+| [方式二：使用 Docker Hub 镜像](#docker-hub) | 不改代码，跳过编译直接拉取镜像；支持 amd64 与 arm64 |
+
+之后按组件升级见[按组件发布与升级](/deploy/releases)。
 
 ## 准备
 
@@ -16,7 +23,7 @@
 - 对象存储的 HTTPS 域名，例如 `s3.example.org`。学生上传、下载佐证时由浏览器直连对象存储，因此它必须能从公网访问；
 - 一个 HTTPS 反向代理（Nginx、Caddy、Cloudflare Tunnel 等）。
 
-## 启动
+## 方式一：从源码构建 {#from-source}
 
 ```sh
 git clone https://github.com/guiguisocute/easy-gpa-plus.git
@@ -24,6 +31,33 @@ cd easy-gpa-plus
 cp .env.example .env
 docker compose --profile full up -d --build
 ```
+
+## 方式二：使用 Docker Hub 镜像 {#docker-hub}
+
+主仓库在 Docker Hub 发布两个公开镜像，同时提供 `linux/amd64` 与 `linux/arm64`：
+
+| 镜像 | 用途 |
+| --- | --- |
+| [`guiguisocute/easy-gpa-plus-backend`](https://hub.docker.com/r/guiguisocute/easy-gpa-plus-backend/tags) | API、数据库迁移与全部 Worker 共用 |
+| [`guiguisocute/easy-gpa-plus-frontend`](https://hub.docker.com/r/guiguisocute/easy-gpa-plus-frontend/tags) | Nginx 与静态前端 |
+
+每个版本以完整的提交 SHA 为标签，`latest` 指向最新发布的一版。Compose 文件和 `deploy/` 下的数据库、对象存储初始化配置仍来自仓库，所以先克隆仓库并切到与镜像相同的提交，再用 `compose.images.yaml` 以镜像代替本机构建：
+
+```sh
+git clone https://github.com/guiguisocute/easy-gpa-plus.git
+cd easy-gpa-plus
+git checkout <sha>    # 与所选镜像标签相同的提交
+cp .env.example .env
+cat > images.env <<'EOF'
+BACKEND_IMAGE=guiguisocute/easy-gpa-plus-backend:<sha>
+FRONTEND_IMAGE=guiguisocute/easy-gpa-plus-frontend:<sha>
+EOF
+docker compose --env-file .env --env-file images.env -f compose.yaml -f compose.images.yaml --profile full up -d
+```
+
+正式部署请固定到具体的 SHA 标签，不要用 `latest`：升级时只改 `images.env` 中的标签，并把仓库切到同一个提交，步骤见[按组件发布与升级](/deploy/releases)。
+
+## 首次登录
 
 默认访问 `http://localhost:3080`（`FRONTEND_PORT` 可改），使用 `.env` 中的运维账号登录。数据库迁移由 `migrate` 服务在 API 启动前自动执行。之后运维创建班级、导入学号与姓名并任命班管，班管配置评分方案、时间窗口及专业成绩。仓库不内置学生名单。
 

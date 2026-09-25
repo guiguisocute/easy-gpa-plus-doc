@@ -9,6 +9,8 @@
 | 后端（API 与全部 Worker 共用） | `ghcr.io/<owner>/easy-gpa-plus-backend:<sha>` |
 | 前端（Nginx 与静态资源） | `ghcr.io/<owner>/easy-gpa-plus-frontend:<sha>` |
 
+Docker Hub 上另有公开镜像 `guiguisocute/easy-gpa-plus-backend` 与 `guiguisocute/easy-gpa-plus-frontend`，同样以 SHA 为标签，支持 amd64 与 arm64，可直接写进下文的 `images.env`；首次部署见[使用 Docker Hub 镜像](/deploy/self-hosting#docker-hub)。
+
 每次发布的 `production-state` 制品包含 `release-manifest.json` 与 `images.env`，记录这一版可以一起使用的前后端镜像。比较基线是上次成功发布的清单：失败发布的改动会在下次补齐，旧的 CI 结果不会覆盖新版本；清单缺失时完整构建两端，手动运行并勾选 `full_deploy` 可以强制构建两端。
 
 ## 首次部署
