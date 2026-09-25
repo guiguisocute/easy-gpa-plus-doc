@@ -37,7 +37,7 @@ docker compose --env-file .env.development -f compose.dev.yaml up -d --build
 
 - 示例只使用虚构数据和 `example.org` 域名。
 - 不要在 Issue、日志或代码中放入个人名单、学号、密钥、运行数据或第三方学校素材。
-- 截图请使用[演示站](https://easygpamock.guiguisocute.com)或本地虚构数据。
+- 截图请使用[演示站](https://easygpa-demo.guiguisocute.com)或本地虚构数据。
 
 ## 许可
 

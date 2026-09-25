@@ -15,7 +15,7 @@ export default defineConfig({
       { text: '部署运维', link: '/deploy/self-hosting', activeMatch: '/deploy/' },
       { text: '参考', link: '/reference/environment', activeMatch: '/reference/' },
       { text: '开发贡献', link: '/development/contributing', activeMatch: '/development/' },
-      { text: '在线体验', link: 'https://easygpamock.guiguisocute.com' }
+      { text: '在线体验', link: 'https://easygpa-demo.guiguisocute.com' }
     ],
     sidebar: [
       { text: '使用指南', items: [

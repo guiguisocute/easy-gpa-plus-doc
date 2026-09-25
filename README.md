@@ -7,7 +7,7 @@
 <p align="center">
   <a href="https://easygpa.guiguisocute.com/"><strong>访问文档站</strong></a> ·
   <a href="https://github.com/guiguisocute/easy-gpa-plus">主仓库</a> ·
-  <a href="https://easygpamock.guiguisocute.com">在线体验</a>
+  <a href="https://easygpa-demo.guiguisocute.com">在线体验</a>
 </p>
 
 EasyGPA Plus 的使用指南、部署运维、配置参考与开发文档，基于 VitePress。需要 Node.js 22 或更新版本。

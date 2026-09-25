@@ -13,7 +13,7 @@ hero:
       link: /guide/getting-started
     - theme: alt
       text: 在线体验
-      link: https://easygpamock.guiguisocute.com
+      link: https://easygpa-demo.guiguisocute.com
     - theme: alt
       text: 自托管部署
       link: /deploy/self-hosting
