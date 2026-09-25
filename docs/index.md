@@ -36,7 +36,7 @@ features:
     linkText: 连接 Agent
 ---
 
-EasyGPA Plus 源自 EasyGPA，面向可复用的开源综合测评场景。React · TypeScript · Go · PostgreSQL · Redis · S3，以 [AGPL-3.0](https://github.com/guiguisocute/easy-gpa-plus/blob/main/LICENSE) 发布。
+React · TypeScript · Go · PostgreSQL · Redis · S3，本项目遵循 [AGPL-3.0](https://github.com/guiguisocute/easy-gpa-plus/blob/main/LICENSE) 协议。
 
 <div class="home-preview">
   <span class="preview-label">班级看板</span>
