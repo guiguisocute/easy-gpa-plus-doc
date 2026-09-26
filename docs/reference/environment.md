@@ -4,6 +4,8 @@
 
 `APP_ENV=prod` 时，进程启动前会检查当前子命令实际用到的关键配置，缺失或仍为默认值就拒绝启动。
 
+运维台「部署与版本」只读展示当前进程的站点地址、可信代理、会话有效期、MCP、对象存储、备份路径和加密密钥就绪状态，不回显密钥或数据库连接串。修改这些部署参数需要调整环境配置并重启对应服务。邮件通道、模型路由与部分运行开关在运维网页保存后生效，两者的边界见[平台运维台](/deploy/operations#运行时设置与部署配置)。
+
 ## 应用
 
 | 变量 | 默认 | 说明 |
@@ -64,16 +66,18 @@
 
 ## 邮件
 
-推荐只设置 `MAIL_SECRET_KEY`，其余在运维台「邮件与通知」填写，见[邮件通知](/deploy/mail)。
+推荐只设置 `MAIL_SECRET_KEY`，其余在运维台「邮件与通知」填写。网页支持腾讯云 SES、SMTP、阿里云邮件推送与 Resend；SMTP、阿里云与 Resend 没有额外环境变量，使用独立的网页通道配置。腾讯云环境变量只作为完整的部署回退配置，不用于补齐网页通道的缺失字段。详见[邮件通知](/deploy/mail)。
 
 | 变量 | 说明 |
 | --- | --- |
-| `MAIL_SECRET_KEY` | 32 字节，加密运维页保存的发信凭据 |
-| `MAIL_TEMPLATE_DIR` | 模板目录，留空自动查找 `asset/mailtemplate`；容器镜像内为 `/app/mailtemplate` |
+| `MAIL_SECRET_KEY` | 32 字节，加密所有网页邮件通道的凭据，包括腾讯云 SecretId/SecretKey、SMTP 用户名/密码、阿里云 AccessKey ID/Secret 与 Resend API Key；不作为发信账号使用 |
+| `MAIL_TEMPLATE_DIR` | 本地模板目录，留空自动查找 `asset/mailtemplate`；容器镜像内为 `/app/mailtemplate`。SMTP、阿里云与 Resend 发送本地渲染正文，腾讯云仍需云模板 ID |
 | `TENCENTCLOUD_SECRET_ID`、`TENCENTCLOUD_SECRET_KEY` | 回退配置：腾讯云凭据 |
 | `TENCENTCLOUD_SES_REGION` | `ap-guangzhou`（默认）或 `ap-hongkong` |
 | `TENCENTCLOUD_SES_FROM`、`TENCENTCLOUD_SES_FROM_NAME`、`TENCENTCLOUD_SES_REPLY_TO` | 回退配置：发信地址、发件人名称、回复地址 |
 | `TENCENTCLOUD_SES_TEMPLATE_IDS` | 回退配置：模板名到模板 ID 的 JSON |
+
+网页「清空并回退」会清除所有通道的数据库连接配置、凭据和云模板 ID，暂停业务邮件，并恢复使用腾讯云部署配置。普通保存时不填写新凭据会保留原值，删除使用独立的清除操作。已经使用的 `MAIL_SECRET_KEY` 不要随意更换，否则需要重新录入已加密的凭据。
 
 ## 备份
 
@@ -88,7 +92,7 @@
 
 ## AI
 
-新部署在运维台「Agent 配置」管理供应商与路由，见 [AI 与班级知识库](/deploy/ai)。
+新部署在运维台「Agent 与知识库」管理供应商与路由，见 [AI 与班级知识库](/deploy/ai)。
 
 | 变量 | 默认 | 说明 |
 | --- | --- | --- |
